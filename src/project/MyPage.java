@@ -14,6 +14,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.Closeable;
 
@@ -101,22 +102,32 @@ public class MyPage extends JFrame{
 		Image updateImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		ImageIcon updateIcon = new ImageIcon(updateImg);
 		
-		// Main 로고 부분 JLabel로 구현
-		JLabel goToMain = new JLabel("북적북적");
+		// Main 로고 부분 JPanel로 구현		
+		JPanel mainBtn = new JPanel();
+		mainBtn.setBackground(Color.WHITE);
+		mainBtn.setLayout(null);
+		GridBagConstraints gbc_mainBtn = new GridBagConstraints();
+		gbc_mainBtn.fill = GridBagConstraints.BOTH;
+		gbc_mainBtn.insets = new Insets(0, 0, 5, 0);
+		gbc_mainBtn.gridx = 0;
+		gbc_mainBtn.gridy = 0;
+		gnb.add(mainBtn, gbc_mainBtn);
 		
-		goToMain.setForeground(new Color(102, 204, 51));
-		goToMain.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 40));
-		goToMain.setBackground(Color.WHITE);
-		goToMain.setHorizontalAlignment(SwingConstants.LEFT);
+		JButton btnNewButton = new JButton("");
+		btnNewButton.setBackground(Color.WHITE);
+		btnNewButton.setIcon(updateIcon);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(0, 0, 100, 100);
+		mainBtn.add(btnNewButton);
 		
-		goToMain.setIcon(updateIcon); // 크기 조절했던 로고가 여기에 들어감
-		
-		GridBagConstraints gbc_goToMain = new GridBagConstraints();
-		gbc_goToMain.fill = GridBagConstraints.BOTH;
-		gbc_goToMain.insets = new Insets(0, 0, 5, 5);
-		gbc_goToMain.gridx = 0;
-		gbc_goToMain.gridy = 0;
-		gnb.add(goToMain, gbc_goToMain);
+		JLabel lblNewLabel = new JLabel("북적북적");
+		lblNewLabel.setForeground(new Color(153, 204, 0));
+		lblNewLabel.setFont(new Font("HY헤드라인M", Font.PLAIN, 40));
+		lblNewLabel.setBounds(110, 25, 196, 60);
+		mainBtn.add(lblNewLabel);
 		
 		// sideBtnWrapper와 goToMain사이 빈 공간을 만들기 위한 Label임.
 		JLabel temp1 = new JLabel("");
