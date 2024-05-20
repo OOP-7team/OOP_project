@@ -96,7 +96,7 @@ public class MyPage extends JFrame{
 		gnb.setLayout(gbl_gnb);
 		
 		// gnb에 들어가는 로고 이미지 크기 조절(크기 조절한 아이콘을 아래 goToMain 라벨에 넣을 예정)
-		ImageIcon icon = new ImageIcon(MyPage.class.getResource("/project/logo.png"));
+		ImageIcon icon = new ImageIcon(MyPage.class.getResource("/images/logo.png"));
 		Image img = icon.getImage();
 		Image updateImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		ImageIcon updateIcon = new ImageIcon(updateImg);
@@ -155,7 +155,7 @@ public class MyPage extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		icon = new ImageIcon(MyPage.class.getResource("/project/group.png"));
+		icon = new ImageIcon(MyPage.class.getResource("/images/group.png"));
 		img = icon.getImage();
 		updateImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		updateIcon = new ImageIcon(updateImg);
@@ -169,11 +169,11 @@ public class MyPage extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		goToBook.setIcon(new ImageIcon(MyPage.class.getResource("/project/book.png")));
+		goToBook.setIcon(new ImageIcon(MyPage.class.getResource("/images/book.png")));
 		goToBook.setForeground(Color.WHITE);
 		goToBook.setBackground(Color.WHITE);
 		goToBook.setBounds(100, 0, 100, 100);
-		icon = new ImageIcon(MyPage.class.getResource("/project/book.png"));
+		icon = new ImageIcon(MyPage.class.getResource("/images/book.png"));
 		img = icon.getImage();
 		updateImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		updateIcon = new ImageIcon(updateImg);
@@ -277,7 +277,7 @@ public class MyPage extends JFrame{
 		// 내 프로필 사진이 들어갈 JLabel: myProfile
 		JLabel myProfile = new JLabel("");
 		myProfile.setHorizontalAlignment(SwingConstants.CENTER);
-		icon = new ImageIcon(MyPage.class.getResource("/project/profile.png"));
+		icon = new ImageIcon(MyPage.class.getResource("/images/profile.png"));
 		img = icon.getImage();
 		updateImg = img.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
 		updateIcon = new ImageIcon(updateImg);
