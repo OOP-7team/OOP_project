@@ -12,11 +12,11 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.Closeable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,12 +26,14 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.border.BevelBorder;
 
 public class MyPage extends JFrame{
 
+	private static final long serialVersionUID = 1L;
+	
 	private JFrame myPage;
 	private JTable myDetail;
 
@@ -61,8 +63,8 @@ public class MyPage extends JFrame{
 	 * 사용자가 이전 창을 닫고 새 창을 열 수 있도록 도와줌.
 	 * 만약 이 함수가 없다면 그 전 창이 그대로 열려있는 상태에서 새 창이 열리게 됨
 	 */
-	public void close() {
-		WindowEvent closeWindow = new WindowEvent(this.myPage, WindowEvent.WINDOW_CLOSING);
+	public static void close(Window window) {
+		WindowEvent closeWindow = new WindowEvent(window, WindowEvent.WINDOW_CLOSING);
 		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
 	}
 
@@ -72,8 +74,15 @@ public class MyPage extends JFrame{
 	private void initialize() {
 		myPage = new JFrame();
 		myPage.getContentPane().setBackground(Color.WHITE);
-		myPage.setBounds(100, 100, 2000, 1200);
-		myPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		myPage.setBounds(100, 100, 1300, 800);
+		myPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
+		myPage.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+            }
+        });
+		myPage.setVisible(true);
 		
 		// 창이 정 가운데에서 뜨도록 해줌
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -214,6 +223,9 @@ public class MyPage extends JFrame{
 		JButton goToQuiz = new JButton("오늘의 퀴즈");
 		goToQuiz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// close(myPage);
+				TodayQuiz todayQuiz = new TodayQuiz();
+				todayQuiz.setVisible(true);
 			}
 		});
 		goToQuiz.setBackground(new Color(192, 236, 149));
@@ -226,15 +238,11 @@ public class MyPage extends JFrame{
 		JButton goToLearningCheck = new JButton("학습 점검");
 		goToLearningCheck.setBackground(new Color(192, 236, 149));
 		
-		
-		/**
-		 * 클릭 시 "학습 점검"창이 새로 뜸
-		 * */
 		goToLearningCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				close();
-				LearningCheck jf2 = new LearningCheck();
-				jf2.setVisible(true);
+				// close(myPage);
+				LearningCheck learningCheck = new LearningCheck();
+				learningCheck.setVisible(true);
 			}
 		});
 		
@@ -245,9 +253,20 @@ public class MyPage extends JFrame{
 		// 세 번째 main button : goToBookMenu
 		JButton goToBookMenu = new JButton("교과서 목록");
 		goToBookMenu.setBackground(new Color(192, 236, 149));
+		
+		goToBookMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// close(myPage);
+				BookMenu bookMenu = new BookMenu();
+				bookMenu.setVisible(true);
+			}
+		});
+		
 		goToBookMenu.setFont(new Font("굴림", Font.PLAIN, 30));
 		goToBookMenu.setBounds(512, 23, 221, 50);
 		mainBtnWrapper.add(goToBookMenu);
+		
+		//-------------------------------------------------------------상단 gnb bar
 		
 		// myPage의 다양한 메뉴가 있는 Tab바 : myPageTab
 		JTabbedPane myPageTab = new JTabbedPane(JTabbedPane.LEFT);
@@ -279,6 +298,7 @@ public class MyPage extends JFrame{
 		JPanel createGroup = new JPanel();
 		myPageTab.addTab("그룹생성", null, createGroup, null);
 		
+		//-------------------------------------------------------------Tab
 		
 		// 좌측 내 정보가 들어갈 JPanel. myProfile 객체와 myDetail 객체가 들어감
 		JPanel myInfo = new JPanel();
@@ -323,6 +343,8 @@ public class MyPage extends JFrame{
 		myDetail.setRowHeight(50);
 		
 		myInfo.add(myDetail);
+		
+		//-------------------------------------------------------------좌측 상세정보
 		
 				
 		
