@@ -62,8 +62,8 @@ public class MyPage extends JFrame{
 	 * 만약 이 함수가 없다면 그 전 창이 그대로 열려있는 상태에서 새 창이 열리게 됨
 	 */
 	public void close() {
-		WindowEvent closeWindow = new WindowEvent(this.myPage, WindowEvent.WINDOW_CLOSING);
-		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
+	    WindowEvent closeWindow = new WindowEvent(this.myPage, WindowEvent.WINDOW_CLOSING);
+	    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
 	}
 
 	/**
@@ -192,11 +192,19 @@ public class MyPage extends JFrame{
 		sideBtnWrapper.add(goToBook);
 		
 		// 세 번째 side button : goToMyPage
-		JButton goToMyPage = new JButton("최예인님");
+		JButton goToMyPage = new JButton("로그인");
 		goToMyPage.setBackground(Color.WHITE);
 		goToMyPage.setFont(new Font("굴림", Font.PLAIN, 30));
 		goToMyPage.setBounds(200, 0, 160, 100);
 		sideBtnWrapper.add(goToMyPage);
+
+		// Add ActionListener to goToMyPage button
+		goToMyPage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginForm loginForm = new LoginForm(); // Create an instance of LoginForm
+				loginForm.setVisible(true); // Make the LoginForm window visible
+			}
+		});
 		
 		// gnb 하단에 들어가는 버튼들이 들어간 JPanel
 		JPanel mainBtnWrapper = new JPanel();
