@@ -31,9 +31,6 @@ public class LearningCheck extends JFrame {
     private JTable myDetail;
     private JTable checkTable;
 
-    /**
-     * Create the application.
-     */
     public LearningCheck() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initialize();

@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import java.util.regex.Pattern;
+import javax.swing.SwingConstants;
 
 public class JoinForm extends JFrame {
 
@@ -63,8 +66,14 @@ public class JoinForm extends JFrame {
 
     public JoinForm() {
         // 프레임 기본 설정
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 500, 500);
+    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+            }
+        });
+        setBounds(100, 100, 685, 715);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -72,76 +81,78 @@ public class JoinForm extends JFrame {
 
         // 이름 입력 필드
         textField = new JTextField();
-        textField.setBounds(54, 65, 143, 21);
+        textField.setBounds(190, 62, 200, 40);
         contentPane.add(textField);
         textField.setColumns(10);
 
         // 아이디/이메일 입력 필드
         textField_1 = new JTextField();
-        textField_1.setBounds(190, 96, 143, 21);
+        textField_1.setBounds(278, 115, 250, 40);
         contentPane.add(textField_1);
         textField_1.setColumns(10);
 
         // 비밀번호 입력 필드
         textField_2 = new JPasswordField();
-        textField_2.setBounds(190, 127, 143, 21);
+        textField_2.setBounds(278, 178, 250, 40);
         contentPane.add(textField_2);
 
         // 비밀번호 보기 버튼
         btnShowPassword = new JButton("보기");
-        btnShowPassword.setBounds(340, 127, 60, 21);
+        btnShowPassword.setBounds(538, 187, 60, 21);
         btnShowPassword.setBackground(new Color(192, 236, 149));
         contentPane.add(btnShowPassword);
 
         // 비밀번호 확인 입력 필드
         textField_3 = new JPasswordField();
-        textField_3.setBounds(190, 158, 143, 21);
+        textField_3.setBounds(278, 244, 250, 40);
         contentPane.add(textField_3);
 
         // 비밀번호 확인 보기 버튼
         btnShowConfirmPassword = new JButton("보기");
-        btnShowConfirmPassword.setBounds(340, 158, 60, 21);
+        btnShowConfirmPassword.setBounds(538, 253, 60, 21);
         btnShowConfirmPassword.setBackground(new Color(192, 236, 149));
         contentPane.add(btnShowConfirmPassword);
 
         // 학교 입력 필드
         textField_4 = new JTextField();
-        textField_4.setBounds(139, 251, 143, 23);
+        textField_4.setBounds(224, 440, 250, 40);
         contentPane.add(textField_4);
         textField_4.setColumns(10);
 
         // 학년 입력 필드
         textField_5 = new JTextField();
-        textField_5.setBounds(139, 284, 36, 21);
+        textField_5.setBounds(224, 490, 120, 40);
         contentPane.add(textField_5);
         textField_5.setColumns(10);
 
         // 반 입력 필드
         textField_6 = new JTextField();
-        textField_6.setBounds(223, 284, 36, 21);
+        textField_6.setBounds(447, 490, 120, 40);
         contentPane.add(textField_6);
         textField_6.setColumns(10);
 
         // 주민등록번호 뒷자리 입력 필드
         textField_9 = new JPasswordField(); // 주민등록번호 뒷자리 필드를 JPasswordField로 변경
-        textField_9.setBounds(139, 220, 143, 21);
+        textField_9.setBounds(278, 367, 250, 40);
         contentPane.add(textField_9);
         textField_9.setColumns(10);
 
         // 주민등록번호 보기 버튼
         btnShowSecret = new JButton("보기");
-        btnShowSecret.setBounds(290, 220, 60, 21);
+        btnShowSecret.setBounds(538, 374, 60, 21);
         btnShowSecret.setBackground(new Color(192, 236, 149));
         contentPane.add(btnShowSecret);
 
         // 학생 라디오 버튼
         rdbtnNewRadioButton = new JRadioButton("학생");
-        rdbtnNewRadioButton.setBounds(205, 64, 69, 23);
+        rdbtnNewRadioButton.setFont(new Font("굴림", Font.PLAIN, 25));
+        rdbtnNewRadioButton.setBounds(407, 65, 88, 27);
         contentPane.add(rdbtnNewRadioButton);
 
         // 교사 라디오 버튼
         rdbtnNewRadioButton_1 = new JRadioButton("교사");
-        rdbtnNewRadioButton_1.setBounds(278, 64, 119, 23);
+        rdbtnNewRadioButton_1.setFont(new Font("굴림", Font.PLAIN, 25));
+        rdbtnNewRadioButton_1.setBounds(507, 68, 119, 23);
         contentPane.add(rdbtnNewRadioButton_1);
 
         // 라디오 버튼 그룹 설정
@@ -151,74 +162,95 @@ public class JoinForm extends JFrame {
 
         // 이름 라벨
         JLabel lblNewLabel = new JLabel("이름");
-        lblNewLabel.setBounds(12, 68, 52, 15);
+        lblNewLabel.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel.setBounds(128, 65, 52, 30);
         contentPane.add(lblNewLabel);
 
         // 아이디/이메일 라벨
         JLabel lblNewLabel_1 = new JLabel("아이디 혹은 이메일");
-        lblNewLabel_1.setBounds(12, 99, 119, 15);
+        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_1.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_1.setBounds(26, 115, 242, 40);
         contentPane.add(lblNewLabel_1);
 
         // 비밀번호 라벨
         JLabel lblNewLabel_2 = new JLabel("비밀번호");
-        lblNewLabel_2.setBounds(12, 130, 52, 15);
+        lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_2.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_2.setBounds(95, 176, 119, 30);
         contentPane.add(lblNewLabel_2);
 
         // 비밀번호 재확인 라벨
         JLabel lblNewLabel_3 = new JLabel("비밀번호 재확인");
-        lblNewLabel_3.setBounds(12, 159, 119, 18);
+        lblNewLabel_3.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_3.setBounds(70, 248, 184, 30);
         contentPane.add(lblNewLabel_3);
 
         // 학교 라벨
-        JLabel lblNewLabel_4 = new JLabel("학교");
-        lblNewLabel_4.setBounds(12, 255, 52, 15);
+        JLabel lblNewLabel_4 = new JLabel("학교명");
+        lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_4.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_4.setBounds(132, 450, 82, 30);
         contentPane.add(lblNewLabel_4);
 
         // 학년 라벨
         lblNewLabel_5 = new JLabel("학년");
-        lblNewLabel_5.setBounds(180, 287, 52, 15);
+        lblNewLabel_5.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_5.setBounds(351, 496, 52, 30);
         contentPane.add(lblNewLabel_5);
 
         // 반 라벨
         lblNewLabel_6 = new JLabel("반");
-        lblNewLabel_6.setBounds(266, 287, 52, 15);
+        lblNewLabel_6.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_6.setBounds(574, 496, 52, 30);
         contentPane.add(lblNewLabel_6);
 
         // 가입하기 버튼
         btnNewButton = new JButton("가입하기");
+        btnNewButton.setFont(new Font("굴림", Font.PLAIN, 30));
         btnNewButton.setBackground(new Color(192, 236, 149));
-        btnNewButton.setBounds(12, 330, 109, 28);
+        btnNewButton.setBounds(205, 545, 252, 53);
         contentPane.add(btnNewButton);
 
         // 생년월일 라벨
         lblNewLabel_7 = new JLabel("생년월일(6자리)");
-        lblNewLabel_7.setBounds(12, 179, 119, 41);
+        lblNewLabel_7.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_7.setBounds(70, 310, 184, 30);
         contentPane.add(lblNewLabel_7);
 
         // 생년월일 입력 필드
         textField_8 = new JTextField();
-        textField_8.setBounds(139, 189, 143, 21);
+        textField_8.setBounds(278, 306, 250, 40);
         contentPane.add(textField_8);
         textField_8.setColumns(10);
 
         // 주민등록번호 뒷자리 라벨
         lblNewLabel_8 = new JLabel("주민등록번호 뒷자리");
-        lblNewLabel_8.setBounds(12, 216, 136, 28);
+        lblNewLabel_8.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_8.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_8.setBounds(28, 374, 265, 30);
         contentPane.add(lblNewLabel_8);
 
         // 비밀번호 안내 라벨
         lblNewLabel_9 = new JLabel("(7자리 이상의 영문자+숫자)");
+        lblNewLabel_9.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel_9.setForeground(Color.RED);
-        lblNewLabel_9.setFont(new Font("굴림", Font.PLAIN, 9));
-        lblNewLabel_9.setBounds(69, 131, 119, 15);
+        lblNewLabel_9.setFont(new Font("굴림", Font.BOLD | Font.ITALIC, 15));
+        lblNewLabel_9.setBounds(44, 205, 224, 15);
         contentPane.add(lblNewLabel_9);
 
         // 정보 입력 안내 라벨
         lblNewLabel_10 = new JLabel(">정보를 입력하세요");
         lblNewLabel_10.setForeground(new Color(117, 216, 103));
-        lblNewLabel_10.setFont(new Font("굴림", Font.BOLD, 15));
-        lblNewLabel_10.setBounds(12, 40, 176, 15);
+        lblNewLabel_10.setFont(new Font("굴림", Font.BOLD, 35));
+        lblNewLabel_10.setBounds(18, 10, 385, 42);
         contentPane.add(lblNewLabel_10);
+        
+        JLabel lblNewLabel_4_1 = new JLabel("학급");
+        lblNewLabel_4_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_4_1.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblNewLabel_4_1.setBounds(132, 500, 82, 30);
+        contentPane.add(lblNewLabel_4_1);
 
         addListeners();
     }

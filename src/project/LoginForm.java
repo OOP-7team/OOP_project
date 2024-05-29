@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LoginForm extends JFrame {
 
@@ -28,40 +30,56 @@ public class LoginForm extends JFrame {
     public void init() {
         // 컴포넌트 초기화
         lblId = new JLabel("아이디");
+        lblId.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblId.setHorizontalAlignment(SwingConstants.CENTER);
         lblPw = new JLabel("비밀번호");
+        lblPw.setFont(new Font("굴림", Font.PLAIN, 25));
+        lblPw.setHorizontalAlignment(SwingConstants.CENTER);
 
         tfId = new JTextField();
+        tfId.setFont(new Font("굴림", Font.PLAIN, 25));
         tfPw = new JPasswordField();
+        tfPw.setFont(new Font("굴림", Font.PLAIN, 25));
 
         btnLogin = new JButton("로그인");
+        btnLogin.setFont(new Font("굴림", Font.PLAIN, 25));
         btnJoin = new JButton("회원가입");
+        btnJoin.setFont(new Font("굴림", Font.PLAIN, 25));
     }
 
     private void setDisplay() {
         // 프레임 설정 및 컴포넌트 배치
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 500, 500);
+        setBounds(100, 100, 685, 715);
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+            }
+        });
+        
         getContentPane().setLayout(null);
 
-        lblId.setBounds(132, 63, 52, 21);
+        lblId.setBounds(44, 166, 125, 42);
         getContentPane().add(lblId);
 
-        tfId.setBounds(196, 63, 106, 21);
+        tfId.setBounds(176, 156, 392, 69);
         getContentPane().add(tfId);
         tfId.setColumns(10);
 
-        lblPw.setBounds(132, 94, 52, 21);
+        lblPw.setBounds(44, 261, 122, 42);
         getContentPane().add(lblPw);
 
-        tfPw.setBounds(196, 94, 106, 21);
+        tfPw.setBounds(176, 251, 392, 69);
         getContentPane().add(tfPw);
         tfPw.setColumns(10);
 
-        btnLogin.setBounds(162, 125, 105, 28);
+        btnLogin.setBounds(223, 401, 213, 55);
         btnLogin.setBackground(new Color(192, 236, 149));
         getContentPane().add(btnLogin);
 
-        btnJoin.setBounds(162, 163, 106, 29);
+        btnJoin.setBounds(223, 470, 213, 55);
         btnJoin.setBackground(new Color(192, 236, 149));
         getContentPane().add(btnJoin);
     }
@@ -118,7 +136,13 @@ public class LoginForm extends JFrame {
     private void showFrame() {
         // 프레임 설정
         setTitle("로그인");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+            }
+        });
         setLocationRelativeTo(null); // 화면 중앙에 표시
         setVisible(true);
     }
