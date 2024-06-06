@@ -19,8 +19,6 @@ public class LoginForm extends JFrame {
     private JButton btnJoin; // 회원가입 버튼
     
     public LoginForm() {
-        users = new UserDataSet(); // UserDataSet 인스턴스 생성
-
         init(); // 컴포넌트 초기화
         setDisplay(); // 컴포넌트를 프레임에 배치
         addListeners(); // 리스너 추가
@@ -84,15 +82,67 @@ public class LoginForm extends JFrame {
         getContentPane().add(btnJoin);
     }
 
+//    private void addListeners() {
+//        // 로그인 버튼에 리스너 추가
+//        btnLogin.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String enteredId = tfId.getText();
+//                String enteredPw = new String(tfPw.getPassword());
+//
+//                // 아이디와 비밀번호가 입력되었는지 확인
+//                if (enteredId.isEmpty() || enteredPw.isEmpty()) {
+//                    JOptionPane.showMessageDialog(LoginForm.this,
+//                            "아이디와 비밀번호를 모두 입력하세요.",
+//                            "로그인 오류",
+//                            JOptionPane.WARNING_MESSAGE);
+//                    return;
+//                }
+//
+//                // 입력된 아이디로 사용자 정보 가져오기
+//                User user = users.getUser(enteredId);
+//                // 사용자 정보가 없거나 비밀번호가 일치하지 않으면 오류 메시지 표시
+//                if (user == null || !user.getPassword().equals(enteredPw)) {
+//                    JOptionPane.showMessageDialog(LoginForm.this,
+//                            "아이디 또는 비밀번호가 올바르지 않습니다.",
+//                            "로그인 오류",
+//                            JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//                
+//                // 로그인 성공시
+//                MainPage.setLoginUser(user);
+//                JOptionPane.showMessageDialog(LoginForm.this,
+//                        "로그인 성공! 화면 이동 중...",
+//                        "로그인 성공",
+//                        JOptionPane.INFORMATION_MESSAGE);
+//
+//                // 로그인 성공 후 로그인 창을 닫음
+//                dispose();
+//                
+//                // MainPage의 버튼 상태 업데이트
+//                MainPage mainPage = MainPage.getInstance();
+//                mainPage.updateLoginButtons();
+//            }
+//        });
+//
+//        // 회원가입 버튼에 리스너 추가
+//        btnJoin.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JoinForm joinForm = new JoinForm();
+//                joinForm.setVisible(true); // JoinForm 화면 표시
+//            }
+//        });
+//    }
+    
     private void addListeners() {
-        // 로그인 버튼에 리스너 추가
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String enteredId = tfId.getText();
                 String enteredPw = new String(tfPw.getPassword());
 
-                // 아이디와 비밀번호가 입력되었는지 확인
                 if (enteredId.isEmpty() || enteredPw.isEmpty()) {
                     JOptionPane.showMessageDialog(LoginForm.this,
                             "아이디와 비밀번호를 모두 입력하세요.",
@@ -101,9 +151,11 @@ public class LoginForm extends JFrame {
                     return;
                 }
 
-                // 입력된 아이디로 사용자 정보 가져오기
+                // UserDataSet 싱글톤 인스턴스 가져오기
+                UserDataSet users = UserDataSet.getUserDataSetInstance();
+                // 사용자 정보 가져오기
                 User user = users.getUser(enteredId);
-                // 사용자 정보가 없거나 비밀번호가 일치하지 않으면 오류 메시지 표시
+
                 if (user == null || !user.getPassword().equals(enteredPw)) {
                     JOptionPane.showMessageDialog(LoginForm.this,
                             "아이디 또는 비밀번호가 올바르지 않습니다.",
@@ -111,39 +163,46 @@ public class LoginForm extends JFrame {
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
-     
+                
+                MainPage.setLoginUser(user);
                 JOptionPane.showMessageDialog(LoginForm.this,
                         "로그인 성공! 화면 이동 중...",
                         "로그인 성공",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                // 로그인 성공 후 로그인 창을 닫음
                 dispose();
+                MainPage mainPage = MainPage.getInstance();
+                mainPage.updateLoginButtons();
             }
         });
 
-        // 회원가입 버튼에 리스너 추가
         btnJoin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JoinForm joinForm = new JoinForm();
-                joinForm.setVisible(true); // JoinForm 화면 표시
+                joinForm.setVisible(true);
             }
         });
     }
 
+//    private void showFrame() {
+//        // 프레임 설정
+//        setTitle("로그인");
+//        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
+//        addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosed(WindowEvent e) {
+//                super.windowClosed(e);
+//            }
+//        });
+//        setLocationRelativeTo(null); // 화면 중앙에 표시
+//        setVisible(true);
+//    }
+    
     private void showFrame() {
-        // 프레임 설정
         setTitle("로그인");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-            }
-        });
-        setLocationRelativeTo(null); // 화면 중앙에 표시
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

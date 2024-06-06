@@ -81,65 +81,83 @@ public class JoinForm extends JFrame {
 
         // 이름 입력 필드
         textField = new JTextField();
+        textField.setFont(new Font("굴림", Font.PLAIN, 25));
         textField.setBounds(190, 62, 200, 40);
         contentPane.add(textField);
         textField.setColumns(10);
 
         // 아이디/이메일 입력 필드
         textField_1 = new JTextField();
+        textField_1.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_1.setBounds(278, 115, 250, 40);
         contentPane.add(textField_1);
         textField_1.setColumns(10);
 
         // 비밀번호 입력 필드
         textField_2 = new JPasswordField();
+        textField_2.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_2.setBounds(278, 178, 250, 40);
         contentPane.add(textField_2);
 
         // 비밀번호 보기 버튼
         btnShowPassword = new JButton("보기");
-        btnShowPassword.setBounds(538, 187, 60, 21);
+        btnShowPassword.setFont(new Font("굴림", Font.PLAIN, 25));
+        btnShowPassword.setBounds(538, 178, 100, 40);
         btnShowPassword.setBackground(new Color(192, 236, 149));
         contentPane.add(btnShowPassword);
 
         // 비밀번호 확인 입력 필드
         textField_3 = new JPasswordField();
+        textField_3.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_3.setBounds(278, 244, 250, 40);
         contentPane.add(textField_3);
 
         // 비밀번호 확인 보기 버튼
         btnShowConfirmPassword = new JButton("보기");
-        btnShowConfirmPassword.setBounds(538, 253, 60, 21);
+        btnShowConfirmPassword.setFont(new Font("굴림", Font.PLAIN, 25));
+        btnShowConfirmPassword.setBounds(538, 244, 100, 40);
         btnShowConfirmPassword.setBackground(new Color(192, 236, 149));
         contentPane.add(btnShowConfirmPassword);
 
         // 학교 입력 필드
         textField_4 = new JTextField();
+        textField_4.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_4.setBounds(224, 440, 250, 40);
         contentPane.add(textField_4);
         textField_4.setColumns(10);
 
         // 학년 입력 필드
         textField_5 = new JTextField();
+        textField_5.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_5.setBounds(224, 490, 120, 40);
         contentPane.add(textField_5);
         textField_5.setColumns(10);
 
         // 반 입력 필드
         textField_6 = new JTextField();
+        textField_6.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_6.setBounds(447, 490, 120, 40);
         contentPane.add(textField_6);
         textField_6.setColumns(10);
+        
+     // 생년월일 입력 필드
+        textField_8 = new JTextField();
+        textField_8.setFont(new Font("굴림", Font.PLAIN, 25));
+        textField_8.setBounds(278, 306, 250, 40);
+        contentPane.add(textField_8);
+        textField_8.setColumns(10);
 
         // 주민등록번호 뒷자리 입력 필드
         textField_9 = new JPasswordField(); // 주민등록번호 뒷자리 필드를 JPasswordField로 변경
+        textField_9.setFont(new Font("굴림", Font.PLAIN, 25));
         textField_9.setBounds(278, 367, 250, 40);
         contentPane.add(textField_9);
         textField_9.setColumns(10);
-
-        // 주민등록번호 보기 버튼
+        
+     // 주민등록번호 보기 버튼
         btnShowSecret = new JButton("보기");
-        btnShowSecret.setBounds(538, 374, 60, 21);
+        btnShowSecret.setFont(new Font("굴림", Font.PLAIN, 25));
+        btnShowSecret.setBounds(538, 367, 100, 40);
         btnShowSecret.setBackground(new Color(192, 236, 149));
         contentPane.add(btnShowSecret);
 
@@ -217,12 +235,6 @@ public class JoinForm extends JFrame {
         lblNewLabel_7.setFont(new Font("굴림", Font.PLAIN, 25));
         lblNewLabel_7.setBounds(70, 310, 184, 30);
         contentPane.add(lblNewLabel_7);
-
-        // 생년월일 입력 필드
-        textField_8 = new JTextField();
-        textField_8.setBounds(278, 306, 250, 40);
-        contentPane.add(textField_8);
-        textField_8.setColumns(10);
 
         // 주민등록번호 뒷자리 라벨
         lblNewLabel_8 = new JLabel("주민등록번호 뒷자리");
@@ -312,7 +324,11 @@ public class JoinForm extends JFrame {
 
                     // 새로운 사용자 생성
                     User newUser = new User(id, password, name, school, grade, className, birthDate, secret, userType);
-                    LoginForm.users.addUser(newUser); // 사용자 추가
+                    
+                    // UserDataSet 싱글톤 인스턴스 가져오기
+                    UserDataSet users = UserDataSet.getUserDataSetInstance();
+                    // 사용자 추가
+                    users.addUser(newUser);
 
                     // 사용자 정보 메시지
                     String message = String.format(

@@ -40,30 +40,39 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class MyPage extends JFrame{
+public class MyPage extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	
-	private JFrame myPage;
+	private static MyPage myPageInstance;
 	private JTable myDetail;
+	
 
+    public static MyPage getInstance() {
+        if (myPageInstance == null) {
+            myPageInstance = new MyPage();
+        }
+        return myPageInstance;
+    }
+    
 	// 프로그램 실행 부분
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MyPage window = new MyPage();
-					window.myPage.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MyPage window = new MyPage();
+//					window.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	
 	// MyPage 객체 생성자
 	public MyPage() {
+		setLayout(new BorderLayout());
 		initialize(); // 모듈화
 	}
 	
@@ -82,214 +91,10 @@ public class MyPage extends JFrame{
 	 * MyPage의 JFrame 객체 초기화
 	 */
 	private void initialize() {
-		myPage = new JFrame();
-		myPage.getContentPane().setBackground(Color.WHITE);
-		myPage.setBounds(100, 100, 1300, 800);
-		myPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 프레임 닫을 때만 종료
-		myPage.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-            }
-        });
-		myPage.setVisible(true);
-		
-		// 창이 정 가운데에서 뜨도록 해줌
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Point centerPoint = ge.getCenterPoint();
-		int leftTopX = centerPoint.x - myPage.getWidth()/2;
-		int leftTopY = centerPoint.y - myPage.getHeight()/2;
-		myPage.setLocation(leftTopX, leftTopY);
-		myPage.getContentPane().setLayout(new BorderLayout(0, 0));
-		
-		// 상단 gnb 부분
-		JPanel gnb = new JPanel();
-		gnb.setBackground(Color.WHITE);
-		myPage.getContentPane().add(gnb, BorderLayout.NORTH);
-		
-		// gnb의 Layout 설정(gridBagLayout을 선택함)
-		GridBagLayout gbl_gnb = new GridBagLayout();
-		gbl_gnb.columnWidths = new int[]{360, 360, 360, 360, 0};
-		gbl_gnb.rowHeights = new int[]{100, 100, 0};
-		gbl_gnb.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_gnb.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gnb.setLayout(gbl_gnb);
-		
-		// gnb에 들어가는 로고 이미지 크기 조절(크기 조절한 아이콘을 아래 goToMain 라벨에 넣을 예정)
-		ImageIcon icon = new ImageIcon(MyPage.class.getResource("/images/logo.png"));
-		Image img = icon.getImage();
-		Image updateImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-		ImageIcon updateIcon = new ImageIcon(updateImg);
-		
-		// Main 로고 부분 JPanel로 구현		
-		JPanel mainBtn = new JPanel();
-		mainBtn.setBackground(Color.WHITE);
-		mainBtn.setLayout(null);
-		GridBagConstraints gbc_mainBtn = new GridBagConstraints();
-		gbc_mainBtn.fill = GridBagConstraints.BOTH;
-		gbc_mainBtn.insets = new Insets(0, 0, 5, 0);
-		gbc_mainBtn.gridx = 0;
-		gbc_mainBtn.gridy = 0;
-		gnb.add(mainBtn, gbc_mainBtn);
-		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBackground(Color.WHITE);
-		btnNewButton.setIcon(updateIcon);
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton.setBounds(0, 0, 100, 100);
-		mainBtn.add(btnNewButton);
-		
-		JLabel lblNewLabel = new JLabel("북적북적");
-		lblNewLabel.setForeground(new Color(153, 204, 0));
-		lblNewLabel.setFont(new Font("HY헤드라인M", Font.PLAIN, 40));
-		lblNewLabel.setBounds(110, 25, 196, 60);
-		mainBtn.add(lblNewLabel);
-		
-		// sideBtnWrapper와 goToMain사이 빈 공간을 만들기 위한 Label임.
-		JLabel temp1 = new JLabel("");
-		GridBagConstraints gbc_temp1 = new GridBagConstraints();
-		gbc_temp1.fill = GridBagConstraints.BOTH;
-		gbc_temp1.insets = new Insets(0, 0, 5, 5);
-		gbc_temp1.gridx = 1;
-		gbc_temp1.gridy = 0;
-		gnb.add(temp1, gbc_temp1);
-		
-		// sideBtnWrapper와 goToMain사이 빈 공간을 만들기 위한 Label임.
-		JLabel temp2 = new JLabel("");
-		GridBagConstraints gbc_temp2 = new GridBagConstraints();
-		gbc_temp2.fill = GridBagConstraints.BOTH;
-		gbc_temp2.insets = new Insets(0, 0, 5, 5);
-		gbc_temp2.gridx = 2;
-		gbc_temp2.gridy = 0;
-		gnb.add(temp2, gbc_temp2);
-		
-		// gnb의 side에 들어가는 button들이 들어가는 JPanel
-		JPanel sideBtnWrapper = new JPanel();
-		sideBtnWrapper.setBackground(Color.WHITE);
-		GridBagConstraints gbc_sideBtnWrapper = new GridBagConstraints();
-		gbc_sideBtnWrapper.fill = GridBagConstraints.BOTH;
-		gbc_sideBtnWrapper.insets = new Insets(0, 0, 5, 0);
-		gbc_sideBtnWrapper.gridx = 3;
-		gbc_sideBtnWrapper.gridy = 0;
-		gnb.add(sideBtnWrapper, gbc_sideBtnWrapper);
-		sideBtnWrapper.setLayout(null);
-		
-		// 첫 번째 side button : goToGroup
-		JButton goToGroup = new JButton("");
-		goToGroup.setForeground(Color.WHITE);
-		goToGroup.setBackground(Color.WHITE);
-		goToGroup.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		icon = new ImageIcon(MyPage.class.getResource("/images/group.png"));
-		img = icon.getImage();
-		updateImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-		updateIcon = new ImageIcon(updateImg);
-		goToGroup.setIcon(updateIcon);
-		goToGroup.setBounds(0, 0, 100, 100);
-		sideBtnWrapper.add(goToGroup);
-		
-		// 두 번째 side button : goToBook
-		JButton goToBook = new JButton("");
-		goToBook.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		goToBook.setIcon(new ImageIcon(MyPage.class.getResource("/images/book.png")));
-		goToBook.setForeground(Color.WHITE);
-		goToBook.setBackground(Color.WHITE);
-		goToBook.setBounds(100, 0, 100, 100);
-		icon = new ImageIcon(MyPage.class.getResource("/images/book.png"));
-		img = icon.getImage();
-		updateImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-		updateIcon = new ImageIcon(updateImg);
-		goToBook.setIcon(updateIcon);
-		sideBtnWrapper.add(goToBook);
-		
-		// 세 번째 side button : goToMyPage
-		JButton goToMyPage = new JButton("로그인");
-		goToMyPage.setBackground(Color.WHITE);
-		goToMyPage.setFont(new Font("굴림", Font.PLAIN, 30));
-		goToMyPage.setBounds(200, 0, 160, 100);
-		sideBtnWrapper.add(goToMyPage);
-
-		// Add ActionListener to goToMyPage button
-		goToMyPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LoginForm loginForm = new LoginForm(); // Create an instance of LoginForm
-				loginForm.setVisible(true); // Make the LoginForm window visible
-			}
-		});
-		
-		// gnb 하단에 들어가는 버튼들이 들어간 JPanel
-		JPanel mainBtnWrapper = new JPanel();
-		mainBtnWrapper.setBackground(Color.WHITE);
-		mainBtnWrapper.setLayout(null);
-		GridBagConstraints gbc_mainBtnWrapper = new GridBagConstraints();
-		gbc_mainBtnWrapper.gridwidth = 4;
-		gbc_mainBtnWrapper.fill = GridBagConstraints.BOTH;
-		gbc_mainBtnWrapper.insets = new Insets(0, 0, 0, 5);
-		gbc_mainBtnWrapper.gridx = 0;
-		gbc_mainBtnWrapper.gridy = 1;
-		gnb.add(mainBtnWrapper, gbc_mainBtnWrapper);
-		
-		// 첫 번째 main button : goToQuiz
-		JButton goToQuiz = new JButton("오늘의 퀴즈");
-		goToQuiz.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// close(myPage);
-				TodayQuiz todayQuiz = new TodayQuiz();
-				todayQuiz.setVisible(true);
-			}
-		});
-		goToQuiz.setBackground(new Color(192, 236, 149));
-		goToQuiz.setFont(new Font("굴림", Font.PLAIN, 30));
-		goToQuiz.setBounds(10, 23, 221, 50);
-		mainBtnWrapper.add(goToQuiz);
-		
-		
-		// 두 번째 main button : goToLearningCheck
-		JButton goToLearningCheck = new JButton("학습 점검");
-		goToLearningCheck.setBackground(new Color(192, 236, 149));
-		
-		goToLearningCheck.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// close(myPage);
-				LearningCheck learningCheck = new LearningCheck();
-				learningCheck.setVisible(true);
-			}
-		});
-		
-		goToLearningCheck.setFont(new Font("굴림", Font.PLAIN, 30));
-		goToLearningCheck.setBounds(258, 23, 221, 50);
-		mainBtnWrapper.add(goToLearningCheck);
-		
-		// 세 번째 main button : goToBookMenu
-		JButton goToBookMenu = new JButton("교과서 목록");
-		goToBookMenu.setBackground(new Color(192, 236, 149));
-		
-		goToBookMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// close(myPage);
-				BookMenu bookMenu = new BookMenu();
-				bookMenu.setVisible(true);
-			}
-		});
-		
-		goToBookMenu.setFont(new Font("굴림", Font.PLAIN, 30));
-		goToBookMenu.setBounds(512, 23, 221, 50);
-		mainBtnWrapper.add(goToBookMenu);
-		
-		//-------------------------------------------------------------상단 gnb bar
-		
 		// myPage의 다양한 메뉴가 있는 Tab바 : myPageTab
 		JTabbedPane myPageTab = new JTabbedPane(JTabbedPane.LEFT);
 		myPageTab.setFont(new Font("굴림", Font.PLAIN, 30));
-		myPage.getContentPane().add(myPageTab, BorderLayout.CENTER);
+		add(myPageTab, BorderLayout.CENTER);
 		
 		
 		// 학급 공부시간 Tab
@@ -548,15 +353,15 @@ public class MyPage extends JFrame{
 		// 좌측 내 정보가 들어갈 JPanel. myProfile 객체와 myDetail 객체가 들어감
 		JPanel myInfo = new JPanel();
 		myInfo.setBackground(Color.WHITE);
-		myPage.getContentPane().add(myInfo, BorderLayout.WEST);
+		add(myInfo, BorderLayout.WEST);
 		
 		// 내 프로필 사진이 들어갈 JLabel: myProfile
 		JLabel myProfile = new JLabel("");
-		myProfile.setHorizontalAlignment(SwingConstants.CENTER);
-		icon = new ImageIcon(MyPage.class.getResource("/images/profile.png"));
-		img = icon.getImage();
-		updateImg = img.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
-		updateIcon = new ImageIcon(updateImg);
+		//myProfile.setHorizontalAlignment(SwingConstants.CENTER);
+		ImageIcon icon = new ImageIcon(MyPage.class.getResource("/images/profile.png"));
+		Image img = icon.getImage();
+		Image updateImg = img.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+		ImageIcon updateIcon = new ImageIcon(updateImg);
 		myInfo.setLayout(new GridLayout(2, 0, 0, 0));
 		myProfile.setIcon(updateIcon);
 		myInfo.add(myProfile);
@@ -564,9 +369,9 @@ public class MyPage extends JFrame{
 		// 내 상세 정보가 들어가는 JTable: myDetail
 		String[] columnNames = {"정보", "내용"};
 		Object[][] rowData = {
-				{"학년", 2},
-				{"반", 3},
-				{"공부시간", "29시간"}
+				{"학년", MainPage.getLoginUser().getGrade()},
+				{"반", MainPage.getLoginUser().getClassName()},
+				{"공부시간", MainPage.getLoginUser().getStudyTime()}
 		};
 		
 		myDetail = new JTable(rowData, columnNames);

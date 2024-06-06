@@ -56,7 +56,8 @@ public class LearningCheck extends JFrame {
 
 		
 		
-		JPanel content = new JPanel();
+		JPanel content = 
+				new JPanel();
 		content.setBackground(Color.WHITE);
 		getContentPane().add(content, BorderLayout.CENTER);
 		content.setLayout(null);
