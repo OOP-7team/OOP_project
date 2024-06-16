@@ -1,6 +1,7 @@
 package project;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,5 +91,15 @@ public class Quiz {
 		this.dueDateTime = dueDateTime;
 	}
     
+	@Override
+    public String toString() {
+		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH시 mm분 ss초까지");
+        return title + "\t" +
+               subject + "\t" +
+               // createdDateTime.format(formatter1) + "\t" +
+               dueDateTime.format(formatter2);
+               // questions.size() + "개";
+    }
     
 }

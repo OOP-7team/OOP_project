@@ -3,6 +3,7 @@ package project;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -141,11 +142,25 @@ public class MyPage extends JPanel{
         gradeField.setText(currentUser.getGrade());
         classField.setText(currentUser.getClassName());
         birthField.setText(currentUser.getBirthDate());
-         
+        
+        // 지도보기 버튼
+        JButton mapButton = new JButton("지도보기");
+        mapButton.setFont(new Font("굴림", Font.PLAIN, 20));
+        mapButton.setBounds(50, 300, 150, 40);
+        mapButton.setBackground(new Color(173, 216, 230));
+        myinform.add(mapButton);
+        
+        // 지도보기 버튼 이벤트 처리
+        mapButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		MyMap myMap = new MyMap();
+        	}
+        });
+        
         // 수정하기 버튼
         JButton editButton = new JButton("수정하기");
         editButton.setFont(new Font("굴림", Font.PLAIN, 20));
-        editButton.setBounds(50, 300, 150, 40);
+        editButton.setBounds(50, 350, 150, 40);
         editButton.setBackground(new Color(192, 236, 149));
         myinform.add(editButton);
 
@@ -204,7 +219,7 @@ public class MyPage extends JPanel{
      // 회원탈퇴 버튼
        JButton deleteAccountButton = new JButton("회원탈퇴");
        deleteAccountButton.setFont(new Font("굴림", Font.PLAIN, 20));
-       deleteAccountButton.setBounds(50, 350, 150, 40);
+       deleteAccountButton.setBounds(50, 400, 150, 40);
        deleteAccountButton.setBackground(new Color(255, 105, 97)); // 붉은색으로 배경 설정
        myinform.add(deleteAccountButton);
        
@@ -240,17 +255,25 @@ public class MyPage extends JPanel{
        noticeManagement.initialize();
 
        // 나의 교과서 Tab
-       myBook = new JPanel(new BorderLayout());
+       myBook = new JPanel();
        myPageTab.addTab("나의 교과서", null, myBook, null);
 
        // 나의 학습자료 Tab
-       JPanel myStudyPaper = new JPanel();
+       JPanel myStudyPaper = new JPanel(new BorderLayout());
        myPageTab.addTab("나의 학습자료", null, myStudyPaper, null);
        
-         /* 학습자료 업로드 */
-         JButton uploadButton = new JButton(new ImageIcon("/images/plusfile.png"));
-         myStudyPaper.add(uploadButton);
+         /* 학습자료 업로드 */ 
+       JPanel Studypaper_bottom = new JPanel(new BorderLayout());
+       myStudyPaper.add(Studypaper_bottom, BorderLayout.SOUTH);
 
+       JPanel Studypaper_file = new JPanel();
+       myStudyPaper.add(Studypaper_file);
+       
+         JButton uploadButton = new JButton(new ImageIcon(""));
+         uploadButton.setBackground(Color.WHITE);
+         uploadButton.setIcon(new ImageIcon(MyPage.class.getResource("/images/plusfile.png")));
+         Studypaper_bottom.add(uploadButton);
+         
          uploadButton.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent e) {
                  if (MainPage.getLoginUser().getUserType().equals("교사")) {
@@ -261,7 +284,6 @@ public class MyPage extends JPanel{
                          addFileButton(selectedFile);
                      }
                      File file = new File("/path/to/your/file"); // 예시 파일 경로
-                     addFileButton(file);
                  } else {
                      JOptionPane.showMessageDialog(null, "업로드 권한이 없습니다", "Error", JOptionPane.ERROR_MESSAGE);
                  }
@@ -269,6 +291,8 @@ public class MyPage extends JPanel{
 
              private void addFileButton(File file) {
                  JButton fileButton = new JButton(file.getName());
+                 fileButton.setPreferredSize(new Dimension(100, 30));
+                 
                  fileButton.addActionListener(new ActionListener() {
                      @Override
                      public void actionPerformed(ActionEvent e) {
@@ -279,11 +303,16 @@ public class MyPage extends JPanel{
                          }
                      }
                  });
-                 myStudyPaper.add(fileButton);
+                 Studypaper_file.add(fileButton);
+                 Studypaper_file.revalidate();
+                 Studypaper_file.repaint();
+                 /*myStudyPaper.add(fileButton);
                  myStudyPaper.revalidate();
-                 myStudyPaper.repaint();
+                 myStudyPaper.repaint();*/
              }
          });
+       
+
        
 
        // 그룹목록 Tab

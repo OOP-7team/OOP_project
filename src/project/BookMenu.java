@@ -11,9 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,11 +24,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
 
 public class BookMenu extends JFrame{
 
    private static final long serialVersionUID = 1L;
-   
+ 
    private JFrame frame;
 
 
@@ -86,78 +89,82 @@ public class BookMenu extends JFrame{
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
-        
-        
       
       JLabel contentTitle = new JLabel("> 전체 교과서 목록");
       contentTitle.setFont(new Font("굴림", Font.PLAIN, 30));
       contentTitle.setBounds(40, 24, 305, 35);
       content.add(contentTitle);
+   
+      //교과서 1번 
+      JButton textbook1 = new JButton();
+      textbook1.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Kim.jpg")));
+      textbook1.setBounds(96, 69, 125, 176);
+      content.add(textbook1);
       
-       //교과서 1번 
-         JButton textbook1 = new JButton();
-         textbook1.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Kim.jpg")));
-         textbook1.setBounds(96, 69, 125, 176);
-         content.add(textbook1);
-         
-         textbook1.addActionListener(new ActionListener() {
-               @Override
-               public void actionPerformed(ActionEvent e) {
-                   try {
-                       // 열고자 하는 URL
-                       URI uri = new URI("https://webdt.edunet.net/url/u8dj7iqnfzua");
-                       // 데스크탑 객체 생성
-                       if (Desktop.isDesktopSupported()) {
-                           Desktop desktop = Desktop.getDesktop();
-                           if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                               desktop.browse(uri);
-                           }
-                       }
-                   } catch (IOException | URISyntaxException ex) {
-                       ex.printStackTrace();
-                   }
+      textbook1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // 열고자 하는 URL
+                    URI uri = new URI("https://webdt.edunet.net/url/u8dj7iqnfzua");
+                    // 데스크탑 객체 생성
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                            desktop.browse(uri);
+                        }
+                    }
+                } catch (IOException | URISyntaxException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+      JLabel textbookLabel1 = new JLabel("초등 3-1 과학 (김영사)");
+      textbookLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+      textbookLabel1.setFont(new Font("굴림", Font.PLAIN, 20));
+      textbookLabel1.setBounds(53, 255, 180, 25);
+      content.add(textbookLabel1);
+      
+      JButton addbook1 = new JButton("담기");   /*나의 교과서로 담기*/
+      addbook1.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+             BookState bookState1 = BookState.getInstance();
+              if (!bookState1.addBook1()) {
+                   // 오류 메시지 표시
+                   JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                   return;
                }
-           });
-           
-         JLabel textbookLabel1 = new JLabel("초등 3-1 과학 (김영사)");
-         textbookLabel1.setHorizontalAlignment(SwingConstants.CENTER);
-         textbookLabel1.setFont(new Font("굴림", Font.PLAIN, 20));
-         textbookLabel1.setBounds(53, 255, 180, 25);
-         content.add(textbookLabel1);
-         
-         JButton addbook1 = new JButton("담기");   /*나의 교과서로 담기*/
-         addbook1.addActionListener(new ActionListener() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                  // 새로운 버튼 나의 교과서에 생성
-                  JButton addMybook1 = new JButton();
-                  addMybook1.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Kim.jpg")));
-                  addMybook1.addActionListener(new ActionListener() {
-                     @Override
-                     public void actionPerformed(ActionEvent e) {
-                         try {                 
-                             URI uri = new URI("https://webdt.edunet.net/url/u8dj7iqnfzua");
-                             if (Desktop.isDesktopSupported()) {
-                                 Desktop desktop = Desktop.getDesktop();
-                                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                                     desktop.browse(uri);
-                                 }
-                             }
-                         } catch (IOException | URISyntaxException ex) {
-                             ex.printStackTrace();
-                         }
-                     }
-                 });
-                  
-                  MyPage.myBook.add(addMybook1); 
-                  // 패널의 레이아웃을 새로고침
-                  MyPage.myBook.revalidate();
-                  MyPage.myBook.repaint();
-              }
-          });
+               // 새로운 버튼 나의 교과서에 생성
+               JButton addMybook1 = new JButton();
+               addMybook1.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Kim.jpg")));
+               addMybook1.addActionListener(new ActionListener() {
+                  @Override
+                  public void actionPerformed(ActionEvent e) {
+                      try {                 
+                          URI uri = new URI("https://webdt.edunet.net/url/u8dj7iqnfzua");
+                          if (Desktop.isDesktopSupported()) {
+                              Desktop desktop = Desktop.getDesktop();
+                              if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                                  desktop.browse(uri);
+                              }
+                          }
+                      } catch (IOException | URISyntaxException ex) {
+                          ex.printStackTrace();
+                      }
+                  }
+              });
+               
+               MyPage.myBook.add(addMybook1); 
+               // 패널의 레이아웃을 새로고침
+               MyPage.myBook.revalidate();
+               MyPage.myBook.repaint();  
+           }
+       });
 
-         addbook1.setBounds(232, 256, 68, 26);
-         content.add(addbook1);
+      addbook1.setBounds(232, 256, 68, 26);
+      content.add(addbook1);
          
          
          //교과서 2번
@@ -195,6 +202,12 @@ public class BookMenu extends JFrame{
          addbook2.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState2 = BookState.getInstance();
+                 if (!bookState2.addBook2()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook2 = new JButton();
                   addMybook2.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Mirae.jpg")));
@@ -260,6 +273,12 @@ public class BookMenu extends JFrame{
          addbook3.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState3 = BookState.getInstance();
+                 if (!bookState3.addBook3()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook3 = new JButton();
                   addMybook3.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Icecream.jpg")));
@@ -325,6 +344,12 @@ public class BookMenu extends JFrame{
          addbook4.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState4 = BookState.getInstance();
+                 if (!bookState4.addBook4()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook4 = new JButton();
                   addMybook4.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Jihak.jpg")));
@@ -390,6 +415,12 @@ public class BookMenu extends JFrame{
          addbook5.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState5 = BookState.getInstance();
+                 if (!bookState5.addBook5()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook5 = new JButton();
                   addMybook5.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-1_Cheonjae.jpg")));
@@ -419,6 +450,10 @@ public class BookMenu extends JFrame{
 
          addbook5.setBounds(561, 488, 68, 26);
          content.add(addbook5);
+         
+         JScrollPane scrollPane_1 = new JScrollPane();
+         scrollPane_1.setBounds(0, 0, 2, 2);
+         content.add(scrollPane_1);
          
          //교과서 6번
          JButton textbook6 = new JButton();
@@ -456,6 +491,12 @@ public class BookMenu extends JFrame{
          addbook6.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState6 = BookState.getInstance();
+                 if (!bookState6.addBook6()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook6 = new JButton();
                   addMybook6.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-2_Kim.jpg")));
@@ -521,6 +562,12 @@ public class BookMenu extends JFrame{
          addbook7.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState7 = BookState.getInstance();
+                 if (!bookState7.addBook7()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook7 = new JButton();
                   addMybook7.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-2_Dong.png")));
@@ -586,6 +633,12 @@ public class BookMenu extends JFrame{
          addbook8.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState8 = BookState.getInstance();
+                 if (!bookState8.addBook8()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook8 = new JButton();
                   addMybook8.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-2_Jihak.jpg")));
@@ -651,6 +704,12 @@ public class BookMenu extends JFrame{
          addbook9.addActionListener(new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
+                 BookState bookState9 = BookState.getInstance();
+                 if (!bookState9.addBook9()) {
+                      // 오류 메시지 표시
+                      JOptionPane.showMessageDialog(null, "이미 담긴 교과서입니다", "오류", JOptionPane.ERROR_MESSAGE);
+                      return;
+                  }
                   // 새로운 버튼 나의 교과서에 생성
                   JButton addMybook9 = new JButton();
                   addMybook9.setIcon(new ImageIcon(BookMenu.class.getResource("/images/textbook/science_3-2_Cheonjae.jpg")));

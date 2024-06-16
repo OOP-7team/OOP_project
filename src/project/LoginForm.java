@@ -25,6 +25,11 @@ public class LoginForm extends JFrame {
     private JRadioButton rbTeacher; // 교사 라디오 버튼
     private ButtonGroup roleGroup; // 라디오 버튼 그룹
     private JButton btnShowPassword; // 비밀번호 보기 버튼
+    
+    public static void close(Window window) {
+		WindowEvent closeWindow = new WindowEvent(window, WindowEvent.WINDOW_CLOSING);
+		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
+	}
 
     public LoginForm() {
         users = new UserDataSet(); // UserDataSet 인스턴스 생성
@@ -183,18 +188,18 @@ public class LoginForm extends JFrame {
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
+                    //MainPage의 버튼 상태 업데이트
+                    MainPage.setLoginUser(user);
+                    MainPage mainPage = MainPage.getInstance();
+                    mainPage.updateLoginButtons();
+                    mainPage.displayQuizzes();
+                    
                     JOptionPane.showMessageDialog(LoginForm.this,
                             "로그인 성공! " + role + "으로 화면 이동 중...",
                             "로그인 성공",
                             JOptionPane.INFORMATION_MESSAGE);
                     
-                    // 로그인 성공 후 로그인 창을 닫음
                     dispose();
-                    
-                    //MainPage의 버튼 상태 업데이트
-                    MainPage.setLoginUser(user);
-                    MainPage mainPage = MainPage.getInstance();
-                    mainPage.updateLoginButtons();
                 }
             });
 
