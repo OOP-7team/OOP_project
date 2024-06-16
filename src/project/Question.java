@@ -1,16 +1,30 @@
 package project;
 
+import java.util.List;
+
 public class Question {
     private String question;
     private String correctAnswer;
-    private String userAnswer;
-    private boolean isCorrect;
+    private List<Answer> answers;
+    private String questionType;
+    // private String userAnswer;
+    // private boolean isCorrect;
 
-    public Question(String question, String correctAnswer, String userAnswer) {
+    public Question(String question, String correctAnswer) {
         this.question = question;
         this.correctAnswer = correctAnswer;
-        this.userAnswer = userAnswer;
-        this.isCorrect = (correctAnswer == userAnswer);
+        this.questionType = "단답식";
+        // this.userAnswer = userAnswer;
+        // this.isCorrect = (correctAnswer == userAnswer);
+    }
+    
+    public Question(String question, String correctAnswer, List<Answer> answers) {
+        this.question = question;
+        this.correctAnswer = correctAnswer;
+        this.setAnswers(answers);
+        this.questionType = "객관식";
+        // this.userAnswer = userAnswer;
+        // this.isCorrect = (correctAnswer == userAnswer);
     }
 
     // Getter 및 Setter 메서드들
@@ -30,19 +44,35 @@ public class Question {
         this.correctAnswer = correctAnswer;
     }
 
-    public String getUserAnswer() {
-        return userAnswer;
-    }
+	public List<Answer> getAnswers() {
+		return answers;
+	}
 
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
-    }
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
+	}
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
+	public String getQuestionType() {
+		return questionType;
+	}
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
-    }
+	public void setQuestionType(String questionType) {
+		this.questionType = questionType;
+	}
+
+//    public String getUserAnswer() {
+//        return userAnswer;
+//    }
+//
+//    public void setUserAnswer(String userAnswer) {
+//        this.userAnswer = userAnswer;
+//    }
+//
+//    public boolean isCorrect() {
+//        return isCorrect;
+//    }
+//
+//    public void setCorrect(boolean correct) {
+//        isCorrect = correct;
+//    }
 }

@@ -2,6 +2,7 @@ package project;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -15,12 +16,19 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
@@ -34,12 +42,17 @@ public class MainPage extends JFrame{
 	private JButton userButton;
     private JButton logoutButton;
     
+    // 공지사항 표시에 이용
+    private List<Notice> notices = new ArrayList<>();
+    private ClassNoticeManagement noticeManager;  // Notice 관리 클래스
+    JPanel noticeContentWrapper;
+    
     private JLabel imageLabel;
     private int imageIndex = 0;
     private final String[] images = {
-        "/images/mainBanner/image1.jpg",
-        "/images/mainBanner/image2.jpg",
-        "/images/mainBanner/image3.jpg"
+        "/images/mainBanner/image1.png",
+        "/images/mainBanner/image2.png",
+        "/images/mainBanner/image3.png"
     };
     
     private JScrollPane scrollPane;
@@ -51,7 +64,7 @@ public class MainPage extends JFrame{
         imageLabel.setIcon(new ImageIcon(image));
     }
     
-	private static User loginUser = null;
+	static User loginUser = null;
 
 	// 접근자 메서드 제공
 	public static User getLoginUser() {
@@ -64,6 +77,18 @@ public class MainPage extends JFrame{
 
 	
 	public static void main(String[] args) {
+		// 새로운 사용자 생성
+        User newUser1 = new User("cyaein", "choi0026", "최예인", "숙명초등학교", "2", 
+        		"1", "2003.10.13", "", "학생", "", "");
+        User newUser2 = new User("yyi", "yoonyi4444", "윤용익", "숙명초등학교", "2", 
+        		"1", "2003.10.13", "", "교사", "", "");
+        
+        // UserDataSet 싱글톤 인스턴스 가져오기
+        UserDataSet users = UserDataSet.getUserDataSetInstance();
+        // 사용자 추가
+        users.addUser(newUser1);
+        users.addUser(newUser2);
+        
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -156,6 +181,9 @@ public class MainPage extends JFrame{
 		mainBtn.setIcon(updateIcon);
 		mainBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	if(loginUser == null) {
+            		return;
+            	}
                 showMainPage();
             }
         });
@@ -188,38 +216,33 @@ public class MainPage extends JFrame{
 		gbc_temp2.gridy = 0;
 		gnb.add(temp2, gbc_temp2);
 		
-		// 첫 번째 side button : goToGroup
-		JButton goToGroup = new JButton("");
-		goToGroup.setForeground(Color.WHITE);
-		goToGroup.setBackground(Color.WHITE);
-		goToGroup.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		icon = new ImageIcon(MyPage.class.getResource("/images/group.png"));
-		img = icon.getImage();
-		updateImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-		updateIcon = new ImageIcon(updateImg);
-		goToGroup.setIcon(updateIcon);
-		goToGroup.setBounds(0, 0, 100, 100);
-		temp2.add(goToGroup);
 		
-		// 두 번째 side button : goToBook
-		JButton goToBook = new JButton("");
-		goToBook.addActionListener(new ActionListener() {
+		// side button : goToQuizRegistration
+		JButton goToQuizRegistration = new JButton("");
+		goToQuizRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(loginUser == null) {
+					JOptionPane.showMessageDialog(goToQuizRegistration, "로그인 후 이용해주세요.", "이용 안내", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(loginUser.getUserType().equals("학생")) {
+					JOptionPane.showMessageDialog(goToQuizRegistration, "교사만 이용 가능합니다.", "이용 안내", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				QuizRegistration quizRegistration = new QuizRegistration();
+				quizRegistration.setVisible(true);
 			}
 		});
-		goToBook.setIcon(new ImageIcon(MyPage.class.getResource("/images/book.png")));
-		goToBook.setForeground(Color.WHITE);
-		goToBook.setBackground(Color.WHITE);
-		goToBook.setBounds(100, 0, 100, 100);
+		goToQuizRegistration.setIcon(new ImageIcon(MyPage.class.getResource("/images/book.png")));
+		goToQuizRegistration.setForeground(Color.WHITE);
+		goToQuizRegistration.setBackground(Color.WHITE);
+		goToQuizRegistration.setBounds(100, 0, 100, 100);
 		icon = new ImageIcon(MyPage.class.getResource("/images/book.png"));
 		img = icon.getImage();
 		updateImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		updateIcon = new ImageIcon(updateImg);
-		goToBook.setIcon(updateIcon);
-		temp2.add(goToBook);
+		goToQuizRegistration.setIcon(updateIcon);
+		temp2.add(goToQuizRegistration);
 		
 		
 		// gnb의 side에 들어가는 로그인/마이페이지&로그아웃 버튼이 들어가는 JPanel
@@ -260,6 +283,10 @@ public class MainPage extends JFrame{
 		goToQuiz.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// close(myPage);
+				if(loginUser == null) {
+					JOptionPane.showMessageDialog(goToQuiz, "로그인 후 이용해주세요.", "이용 안내", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				TodayQuiz todayQuiz = new TodayQuiz();
 				todayQuiz.setVisible(true);
 			}
@@ -277,6 +304,10 @@ public class MainPage extends JFrame{
 		goToLearningCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// close(myPage);
+				if(loginUser == null) {
+					JOptionPane.showMessageDialog(goToLearningCheck, "로그인 후 이용해주세요.", "이용 안내", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				LearningCheck learningCheck = new LearningCheck();
 				learningCheck.setVisible(true);
 			}
@@ -293,18 +324,44 @@ public class MainPage extends JFrame{
 		goToBookMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// close(myPage);
+				if(loginUser == null) {
+					JOptionPane.showMessageDialog(goToBookMenu, "로그인 후 이용해주세요.", "이용 안내", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				BookMenu bookMenu = new BookMenu();
 				bookMenu.setVisible(true);
 			}
 		});
 		
+		
 		goToBookMenu.setFont(new Font("굴림", Font.PLAIN, 30));
 		goToBookMenu.setBounds(512, 23, 221, 50);
 		bottomBtnWrapper.add(goToBookMenu);
 		
+		// 네 번째 main button : goToQuizCaculator
+		JButton goToQuizCalculator = new JButton("퀴즈 계산기");
+		goToQuizCalculator.setFont(new Font("굴림", Font.PLAIN, 30));
+		goToQuizCalculator.setBackground(new Color(192, 236, 149));
+		goToQuizCalculator.setBounds(766, 23, 221, 50);
+		
+		goToQuizCalculator.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// close(myPage);
+				if(loginUser == null) {
+					JOptionPane.showMessageDialog(goToQuizCalculator, "로그인 후 이용해주세요.", "이용 안내", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				QuizCalculator quizCalculator = new QuizCalculator();
+				quizCalculator.setVisible(true);
+			}
+		});
+		
+		bottomBtnWrapper.add(goToQuizCalculator);
+		
 		//----------------------------------------------------------------------------------------------상단 gnb bar
 		
 		mainContentWrapper = new JPanel();
+		mainContentWrapper.setBackground(Color.WHITE);
 		mainContentWrapper.setLayout(null);
 		mainContentWrapper.setPreferredSize(new Dimension(1200, 1000));
 		
@@ -352,9 +409,18 @@ public class MainPage extends JFrame{
         noticeContentTitle.setBounds(47, 46, 360, 61);
         noticeWrapper.add(noticeContentTitle);
         
-        JPanel noticeContentWrapper = new JPanel();
+        noticeContentWrapper = new JPanel();
         noticeContentWrapper.setBounds(47, 127, 510, 350);
         noticeWrapper.add(noticeContentWrapper);
+        
+        if(loginUser == null) {
+        	JLabel noticeLoginMessage = new JLabel("로그인 후 이용해주세요");
+            noticeLoginMessage.setFont(new Font("굴림", Font.PLAIN, 25));
+            noticeContentWrapper.add(noticeLoginMessage);
+        }else {
+        	
+        }
+        
         
         JPanel toDoWrapper = new JPanel();
         toDoWrapper.setBackground(new Color(192, 236, 149));
@@ -371,7 +437,46 @@ public class MainPage extends JFrame{
         JPanel toDoContentWrapper = new JPanel();
         toDoContentWrapper.setBounds(47, 127, 455, 350);
         toDoWrapper.add(toDoContentWrapper);
+        
+        if(loginUser == null) {
+        	JLabel toDoLoginMessage = new JLabel("로그인 후 이용해주세요");
+            toDoLoginMessage.setFont(new Font("굴림", Font.PLAIN, 25));
+            toDoContentWrapper.add(toDoLoginMessage);
+        }
+
     }
+	
+	public void addNotice(Notice notice) {
+        notices.add(0, notice); // 작성한 공지사항을 가장 위에 배치
+        updateNotices();
+    }
+
+    private void updateNotices() {
+          if (noticeContentWrapper == null) {
+               // Just for safety, if noticeContentWrapper is somehow null, initialize it
+               noticeContentWrapper = new JPanel();
+               noticeContentWrapper.setLayout(new BoxLayout(noticeContentWrapper, BoxLayout.Y_AXIS));
+           }
+
+           noticeContentWrapper.removeAll();
+           
+           int displayCount = Math.min(notices.size(), 5);
+           for (int i = 0; i < displayCount; i++) {
+               Notice notice = notices.get(i);
+               JLabel noticeLabel = new JLabel(notice.getTitle());
+               noticeLabel.setFont(new Font("굴림", Font.PLAIN, 20));
+               noticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+               noticeLabel.addMouseListener(new MouseAdapter() {
+                   @Override
+                   public void mouseClicked(MouseEvent e) {
+                       noticeManager.displayNoticeDetail(notice);
+                   }
+               });
+               noticeContentWrapper.add(noticeLabel);
+           }
+           noticeContentWrapper.revalidate();
+           noticeContentWrapper.repaint();
+       }
 	
 		
 	
@@ -401,7 +506,9 @@ public class MainPage extends JFrame{
 	            userButton.addActionListener(new ActionListener() {
 	                @Override
 	                public void actionPerformed(ActionEvent e) {
-	                    displayMyPage();
+	                	if(loginUser != null) {
+	                		displayMyPage();
+	                	}
 	                }
 	            });
 	            
@@ -413,9 +520,10 @@ public class MainPage extends JFrame{
 	            }
 	            logoutButton.addActionListener(new ActionListener() {
 	                public void actionPerformed(ActionEvent e) {
+	                	// 순서 바꾸지 말 것
+	                    showMainPage();
 	                    setLoginUser(null);
 	                    updateLoginButtons();
-	                    showMainPage();
 	                }
 	            });
 	            logoutButton.setVisible(true);
@@ -432,11 +540,24 @@ public class MainPage extends JFrame{
 	        repaint();
 	 }
 	 
-	 private void showMainPage() {
+	 public void showMainPage() {
 		 	MyPage myPage = MyPage.getInstance();
 	        getContentPane().remove(myPage);
 	        getContentPane().add(scrollPane, BorderLayout.CENTER);
 	        revalidate();
 	        repaint();
 	    }
+	 
+	 public static void deleteAccount() {
+         if (loginUser != null) {
+             UserDataSet.getUserDataSetInstance().deleteUser(loginUser.getUserId());
+             performLogout();
+         }
+     }
+
+     public static void performLogout() {
+         if (mainPageInstance != null && mainPageInstance.logoutButton != null) {
+             mainPageInstance.logoutButton.doClick();
+     }
+ }
 }
