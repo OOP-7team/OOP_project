@@ -286,7 +286,7 @@ public class BookMenu extends JFrame{
                      @Override
                      public void actionPerformed(ActionEvent e) {
                          try {                 
-                             URI uri = new URI("\"https://webdt.edunet.net/url/1hrucp2h79flc");
+                             URI uri = new URI("https://webdt.edunet.net/url/1hrucp2h79flc");
                              if (Desktop.isDesktopSupported()) {
                                  Desktop desktop = Desktop.getDesktop();
                                  if (desktop.isSupported(Desktop.Action.BROWSE)) {

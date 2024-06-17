@@ -1,13 +1,27 @@
 package project;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.TreeMap;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 
 public class StopWatch extends JPanel {
 
@@ -19,8 +33,9 @@ public class StopWatch extends JPanel {
     private JPanel pieChartPanel;
     private boolean isRunning; // 스톱워치 실행 여부를 나타내는 플래그
     private Thread p_display; // 스톱워치를 동작시키는 스레드
-
+    
     public StopWatch() {
+       
        studyTimeMap = new TreeMap<>((s1, s2) -> {
           // 정렬 기준: 공부 시간 내림차순
             int time1 = studyTimeMap.getOrDefault(s1, 0);
@@ -45,8 +60,15 @@ public class StopWatch extends JPanel {
         p.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // 패널 여백 추가
         JPanel bp = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel wp = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel song = new JLabel();
+        ImageIcon icon = new ImageIcon("/images/song.png");
+      Image img = icon.getImage();
+      Image updateImg = img.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+      ImageIcon updateIcon = new ImageIcon(updateImg);
+      song.setIcon(updateIcon);
         
         subjectComboBox = new JComboBox<>(new String[]{"국어", "영어", "수학", "사회", "과학"});
+        subjectComboBox.setPreferredSize(new Dimension(20 ,40));
         JLabel c1 = new JLabel(" : "); JLabel c2 = new JLabel(" : ");
         
         w1 = new JLabel("00"); w2 = new JLabel("00"); w3 = new JLabel("00");
@@ -56,7 +78,7 @@ public class StopWatch extends JPanel {
         reset = new JButton("리셋");
         record = new JButton("반영");
 
-        bp.add(start); bp.add(pause); bp.add(reset); bp.add(record);
+        bp.add(start); bp.add(pause); bp.add(reset); bp.add(record); bp.add(song);
         
         wp.add(w1); wp.add(c1); wp.add(w2); wp.add(c2); wp.add(w3);
 
@@ -72,10 +94,11 @@ public class StopWatch extends JPanel {
                 drawPieChart(g);
             }
         };
-        pieChartPanel.setPreferredSize(new Dimension(400, 400)); // 크기 조정
-        pieChartPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50)); // 패널 여백 추가
+        
+        pieChartPanel.setPreferredSize(new Dimension(350, 350)); // 크기 조정
+        pieChartPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30)); // 패널 여백 추가
         add(pieChartPanel, BorderLayout.CENTER); // 그래프를 중앙에 배치
-
+        
         start.setFont(new Font("굴림", Font.BOLD, 25));
         pause.setFont(new Font("굴림", Font.BOLD, 25));
         reset.setFont(new Font("굴림", Font.BOLD, 25));
@@ -105,14 +128,13 @@ public class StopWatch extends JPanel {
         int width = pieChartPanel.getWidth();
         int height = pieChartPanel.getHeight();
         int minDimension = Math.min(width, height);
-        int pieSize = minDimension - 20;
+        int pieSize = minDimension - 60;
 
         int x = (width - pieSize) / 2;
-        int y = (height - pieSize) / 2;
+        int y = (height - pieSize) / 2 - 30 ;
         
         Font font = new Font("굴림", Font.BOLD, 12);
         g.setFont(font);
-        int labelY = y; // 라벨 Y 좌표 초기값
 
         List<String> topSubjects = new ArrayList<>();
 
@@ -126,11 +148,12 @@ public class StopWatch extends JPanel {
             g.setColor(getPastelColorForSubject(subject));
             g.fillArc(x, y, pieSize, pieSize, startAngle, angle);
 
-            // 과목 이름 표시
-            int labelX = x + pieSize + 20; // 라벨 X 좌표
+            // 과목 이름 표시 (섹터의 중앙에)
+            double midAngle = Math.toRadians(startAngle + angle / 2.0);
+            int labelX = (int) (x + pieSize / 2 + (pieSize / 4) * Math.cos(midAngle));
+            int labelY = (int) (y + pieSize / 2 - (pieSize / 4) * Math.sin(midAngle));
             g.setColor(Color.BLACK);
             g.drawString(subject, labelX, labelY);
-            labelY += 20; // 라벨 Y 좌표 증가
 
             startAngle += angle;
 
@@ -143,18 +166,31 @@ public class StopWatch extends JPanel {
 
         // 3순위까지의 과목을 출력
         int rankY = y + pieSize + 30; // 라벨 Y 좌표 초기값
-        g.setFont(new Font("굴림", Font.BOLD, 14));
+        g.setFont(new Font("굴림", Font.BOLD, 20));
         g.setColor(Color.BLACK);
-        g.drawString("Top Subjects:", x + 10, rankY);
+        g.drawString("과목 순위", x + 10, rankY);
         rankY += 20;
         for (int i = 0; i < topSubjects.size(); i++) {
             String subject = topSubjects.get(i);
             int time = studyTimeMap.getOrDefault(subject, 0);
-            g.drawString((i + 1) + ". " + subject + ": " + time + "초", x + 10, rankY);
+            String formattedTime = formatTime(time);
+            g.drawString((i + 1) + ". " + subject + ": " + formattedTime, x + 10, rankY);
             rankY += 20;
         }
     }
-
+    
+    private String formatTime(int totalSeconds) {
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d시간 %02d분 %02d초", hours, minutes, seconds);
+    }
+    
+    private String MyDetailformatTime(int totalSeconds) {
+        int hours = totalSeconds / 3600;
+        return String.format("%02d", hours);
+    }
+    
     private Color getPastelColorForSubject(String subject) {
         switch (subject) {
             case "국어":
@@ -234,25 +270,18 @@ public class StopWatch extends JPanel {
 
                 // 순위 재정렬을 위해 TreeMap 재정렬
                 studyTimeMap = sortMapByValue(studyTimeMap);
+                pieChartPanel.repaint();;
 
-                w1.setText("00");
-                w2.setText("00");
-                w3.setText("00");
-                hh = 0;
-                mm = 0;
-                ss = 0;
-
-                pieChartPanel.repaint();
+               }
             }
         }
-    }
 
     public void setDummyData() {
         studyTimeMap.put("국어", 3600); // 1시간
         studyTimeMap.put("영어", 1800); // 30분
         studyTimeMap.put("수학", 5400); // 1시간 30분
         studyTimeMap.put("사회", 7200); // 2시간
-        studyTimeMap.put("과학", 2700); // 45분
+        studyTimeMap.put("과학", 3599); // 45분(2700) -> 2700+899(14분 59초)
 
         // 초기 순위 정렬
         studyTimeMap = sortMapByValue(studyTimeMap);
@@ -267,4 +296,5 @@ public class StopWatch extends JPanel {
         sortedMap.putAll(map);
         return sortedMap;
     }
+  
 }

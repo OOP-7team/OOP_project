@@ -26,6 +26,7 @@ public class GroupManagement {
         groupDetailFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         groupDetailFrame.setLocationRelativeTo(null);
         groupDetailFrame.setLayout(new BorderLayout());
+        groupDetailFrame.setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
         groupDetailPanel = new JPanel(cardLayout);
@@ -54,13 +55,13 @@ public class GroupManagement {
             public void actionPerformed(ActionEvent e) {
                isGroupJoined = true; // 그룹 가입 여부 업데이트
                 JOptionPane.showMessageDialog(groupDetailFrame, "그룹에 가입되었습니다.", "가입 성공", JOptionPane.INFORMATION_MESSAGE);
-         }
-      });
+            }
+        });
         
         // 그룹 게시글 작성 버튼
-        RoundedButton writeBtn = new RoundedButton("");
+        JButton writeBtn = new JButton("");
         writeBtn.setBackground(Color.WHITE);
-       ImageIcon icon = new ImageIcon("/images/pencil.png");
+        ImageIcon icon = new ImageIcon(GroupManagement.class.getResource("/images/pencil.png"));
        Image img = icon.getImage();
        Image updateImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
        ImageIcon updateIcon = new ImageIcon(updateImg);
@@ -167,10 +168,10 @@ public class GroupManagement {
             }
         });
         
-        // 뒤로 가기 버튼
-        RoundedButton backBtnWrite = new RoundedButton("");
-        backBtnWrite.setBackground(Color.WHITE);
-       icon = new ImageIcon("/images/goback.png");
+       // 뒤로 가기 버튼
+       JButton backBtnWrite = new JButton("");
+       backBtnWrite.setBackground(Color.WHITE);
+       icon = new ImageIcon(GroupManagement.class.getResource("/images/goback.png"));
        img = icon.getImage();
        updateImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
        updateIcon = new ImageIcon(updateImg);
@@ -232,9 +233,9 @@ public class GroupManagement {
         contentScrollPane.setBounds(100, 120, 600, 400); // 위치와 크기 지정
         
         // 뒤로 가기 버튼 생성 및 표시
-        RoundedButton backBtnDetail = new RoundedButton("");
+        JButton backBtnDetail = new JButton("");
         backBtnDetail.setBackground(Color.WHITE);
-       ImageIcon icon = new ImageIcon("/images/goback.png");
+       ImageIcon icon = new ImageIcon(GroupManagement.class.getResource("/images/goback.png"));
        Image img = icon.getImage();
        Image updateImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
        ImageIcon updateIcon = new ImageIcon(updateImg);

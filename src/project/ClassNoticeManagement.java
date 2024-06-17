@@ -26,9 +26,9 @@ public class ClassNoticeManagement {
         this.classNoticeContainer.setLayout(new CardLayout());
         initialize();
     }
-
+    
     public void initialize() {
-        classNoticePanel = new JPanel(new BorderLayout());
+        classNoticePanel = new JPanel(new BorderLayout(10, 40));
 
         noticeTable = new JTable();
         noticeTable.setModel(new DefaultTableModel(
@@ -39,10 +39,15 @@ public class ClassNoticeManagement {
         
         // 테이블을 포함한 패널 생성 및 여백 설정
         JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // 좌우 여백 추가
         tablePanel.add(noticeScrollPane, BorderLayout.CENTER);
         
         classNoticePanel.add(noticeScrollPane, BorderLayout.CENTER);
+        
+        // 그룹 목록 테이블 옆 여백 패널
+        JPanel EmptyP1 = new JPanel();
+        classNoticePanel.add(EmptyP1, BorderLayout.WEST);
+        JPanel EmptyP2 = new JPanel();
+        classNoticePanel.add(EmptyP2, BorderLayout.EAST);
 
         noticeTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -68,62 +73,70 @@ public class ClassNoticeManagement {
         noticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         classNoticePanel.add(noticeLabel, BorderLayout.NORTH);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+       JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        JButton writeNoticeBtn = new JButton("");
-        writeNoticeBtn.setBackground(Color.WHITE);
-       ImageIcon icon = new ImageIcon("/images/pencil.png");
+       JButton writeNoticeBtn = new JButton("");
+       writeNoticeBtn.setBackground(Color.WHITE);
+       ImageIcon icon = new ImageIcon(ClassNoticeManagement.class.getResource("/images/pencil.png"));
        Image img = icon.getImage();
        Image updateImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
        ImageIcon updateIcon = new ImageIcon(updateImg);
        writeNoticeBtn.setIcon(updateIcon);
-        // writeNoticeBtn.setPreferredSize(new Dimension(40, 40));
+       writeNoticeBtn.setPreferredSize(new Dimension(40, 40));
         
-        writeNoticeBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (mainPage.loginUser.getUserType().equals("교사")) {
-                    cardLayout.show(classNoticeContainer, "writeNoticePanel");
-                } else {
-                    JOptionPane.showMessageDialog(null, "공지사항을 작성할 권한이 없습니다.", "권한 없음", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        bottomPanel.add(writeNoticeBtn);
+       writeNoticeBtn.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               if (mainPage.loginUser.getUserType().equals("교사")) {
+                   cardLayout.show(classNoticeContainer, "writeNoticePanel");
+               } else {
+                   JOptionPane.showMessageDialog(null, "공지사항을 작성할 권한이 없습니다.", "권한 없음", JOptionPane.ERROR_MESSAGE);
+               }
+           }
+       });
+       bottomPanel.add(writeNoticeBtn);
 
-        classNoticePanel.add(bottomPanel, BorderLayout.SOUTH);
+       classNoticePanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        JPanel writeNoticePanel = new JPanel(new BorderLayout(10, 10)); // 여백 추가
-        writeNoticePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // 패널 여백 추가
+       JPanel writeNoticePanel = new JPanel(new BorderLayout(20, 40)); 
 
-        JPanel topPanel = new JPanel(new BorderLayout(10, 10)); // 여백 추가
-        JButton backBtn = new JButton("");
-        backBtn.setBackground(Color.WHITE);
-       icon = new ImageIcon("/images/goback.png");
+       JPanel topPanel = new JPanel(new BorderLayout(30, 30));
+       JButton backBtn = new JButton("");
+       backBtn.setBackground(Color.WHITE);
+       icon = new ImageIcon(ClassNoticeManagement.class.getResource("/images/goback.png"));
        img = icon.getImage();
        updateImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
        updateIcon = new ImageIcon(updateImg);
        backBtn.setIcon(updateIcon);
-        // backBtn.setPreferredSize(new Dimension(50, 50));
+       backBtn.setPreferredSize(new Dimension(40, 40));
         
         backBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(classNoticeContainer, "classNoticePanel");
             }
         });
+       
         topPanel.add(backBtn, BorderLayout.WEST);
-
-        JPanel titlePanel = new JPanel(new BorderLayout(10, 10));
+        
+        JPanel nTitlePanel = new JPanel();
+        nTitlePanel.setLayout(new BoxLayout(nTitlePanel, BoxLayout.X_AXIS));
         JLabel ntitleLabel = new JLabel("제목: ");
         JTextField ntitleTextField = new JTextField();
-        titlePanel.add(ntitleLabel, BorderLayout.WEST);
-        titlePanel.add(ntitleTextField, BorderLayout.CENTER);
-        topPanel.add(titlePanel, BorderLayout.CENTER);
-
+        ntitleTextField.setPreferredSize(new Dimension(400, 30));
+        nTitlePanel.add(ntitleLabel);
+        nTitlePanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        nTitlePanel.add(ntitleTextField);
+        topPanel.add(nTitlePanel, BorderLayout.CENTER);
         writeNoticePanel.add(topPanel, BorderLayout.NORTH);
 
         JTextArea nwriteTextArea = new JTextArea();
         JScrollPane nwriteScrollPane = new JScrollPane(nwriteTextArea);
         writeNoticePanel.add(nwriteScrollPane, BorderLayout.CENTER);
+        
+        // 그룹 목록 테이블 옆 여백 패널
+        JPanel EmptyP3 = new JPanel();
+        writeNoticePanel.add(EmptyP3, BorderLayout.WEST);
+        JPanel EmptyP4 = new JPanel();
+        writeNoticePanel.add(EmptyP4, BorderLayout.EAST);
 
         JPanel bottomWritePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton submitNoticeBtn = new JButton("작성 완료");
@@ -149,7 +162,7 @@ public class ClassNoticeManagement {
                 }
             }
         });
-
+        
         bottomWritePanel.add(submitNoticeBtn);
         writeNoticePanel.add(bottomWritePanel, BorderLayout.SOUTH);
 
@@ -190,7 +203,11 @@ public class ClassNoticeManagement {
         authorPanel.add(authorLabel, BorderLayout.WEST);
         authorPanel.add(dateLabel, BorderLayout.EAST);
         ndetailFrame.add(authorPanel, BorderLayout.SOUTH);
-
+        
         ndetailFrame.setVisible(true);
+    }
+    
+    public JTable getNoticeTable() {
+        return noticeTable;
     }
 }

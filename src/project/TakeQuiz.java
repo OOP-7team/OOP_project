@@ -53,13 +53,9 @@ public class TakeQuiz extends JFrame {
     // 마감까지 남은 시간 표시
     JLabel due;
 
-    /**
-     * Create the application.
-     */
     public TakeQuiz(Quiz quiz) {
         this.quiz = quiz;
         this.questions = quiz.getQuestions();
-        System.out.println("문제들 전달됨" + questions.toString());
         shortAnswerFields = new JTextField[questions.size()];
         multipleChoiceGroups = new ButtonGroup[questions.size()];
         initialize(quiz);
@@ -117,20 +113,24 @@ public class TakeQuiz extends JFrame {
         basicInfo.add(dueLabel);
         
         
-        LocalDateTime dueDateTime = quiz.getDueDateTime();
+        LocalDateTime dueDateTime = quiz.getDueDateTime(); // 퀴즈 마감 시간 가져오기
         
         // 백그라운드 스레드를 통해 시간 업데이트
         Thread updateTimeThread = new Thread(() -> {
             while (true) {
+            	// 현재 시간과 마감 시간 사이의 기간(Duration)을 계산
                 Duration duration = Duration.between(LocalDateTime.now(), dueDateTime);
-                long seconds = duration.getSeconds();
-                if (seconds <= 0) {
+                long seconds = duration.getSeconds(); // 남은 시간을 초 단위로 계산
+                if (seconds <= 0) { // 남은 시간이 0초 이하일 경우
                     updateDueTimeLabel("마감됨");
                     break;
                 } else {
+                	// 남은 시간을 시, 분, 초 단위로 변환
                     long hours = seconds / 3600;
                     long minutes = (seconds % 3600) / 60;
                     long secs = seconds % 60;
+                    
+                    // 남은 시간을 "HH:MM:SS" 형식의 문자열로 포맷팅
                     String timeLeft = String.format("%02d:%02d:%02d", hours, minutes, secs);
                     updateDueTimeLabel(timeLeft);
                 }
@@ -142,7 +142,7 @@ public class TakeQuiz extends JFrame {
                 }
             }
         });
-        updateTimeThread.start();
+        updateTimeThread.start(); // 백그라운드 스레드 시작
         
         due = new JLabel();
         due.setFont(new Font("굴림", Font.PLAIN, 25));

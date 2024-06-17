@@ -101,8 +101,6 @@ public class QuizRegistration extends JFrame {
         classNameField = new JTextField();
         classNameField.setFont(new Font("굴림", Font.PLAIN, 25));
 
-//        JLabel dueDateLabelTitle = new JLabel("마감일자 선택:");
-//        dueDateLabelTitle.setFont(new Font("굴림", Font.PLAIN, 20));
         JButton dueDateButton = new JButton("마감일자 선택");
         dueDateButton.setFont(new Font("굴림", Font.PLAIN, 25));
         dueDateButton.addActionListener(new ActionListener() {

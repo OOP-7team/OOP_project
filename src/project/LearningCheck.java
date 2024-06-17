@@ -104,9 +104,6 @@ public class LearningCheck extends JFrame {
                     // 새로운 QuizDetail 창 열기
                     QuizDetail quizDetail = new QuizDetail(studentQuizzes.get(selectedRow));
                     quizDetail.setVisible(true);
-
-                    // 선택 이벤트 리스너 제거
-                    //checkTable.getSelectionModel().removeListSelectionListener(this);
                 }
             }
         });

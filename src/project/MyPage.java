@@ -323,20 +323,6 @@ public class MyPage extends JPanel{
        JPanel searchPanel = new JPanel((LayoutManager) new FlowLayout(FlowLayout.CENTER));
        group.add(searchPanel, BorderLayout.NORTH);
 
-       JTextField searchField = new JTextField(" 그룹명", 40);
-       searchField.setBackground(new Color(255, 255, 255));
-       searchField.setFont(new Font("굴림", Font.PLAIN, 18));
-       searchPanel.add(searchField);
-
-       JButton searchBtn = new JButton("");
-       searchBtn.setBackground(Color.WHITE);
-       ImageIcon icon = new ImageIcon(MyPage.class.getResource("/images/search.png"));
-       Image img = icon.getImage();
-       Image updateImg = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-       ImageIcon updateIcon = new ImageIcon(updateImg);
-      searchBtn.setIcon(updateIcon);
-       searchPanel.add(searchBtn);
-
        // 그룹 목록 테이블
        JTable GroupListTable = new JTable();
        GroupListTable.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));   // 여백 생성
@@ -501,31 +487,29 @@ public class MyPage extends JPanel{
            JOptionPane.showMessageDialog(null, "그룹 생성 성공!", "그룹 생성", JOptionPane.INFORMATION_MESSAGE);
        });
       
-      //-------------------------------------------------------------Tab
+        //-------------------------------------------------------------Tab
 
-		
 		// 좌측 내 정보가 들어갈 JPanel. myProfile 객체와 myDetail 객체가 들어감
 		JPanel myInfo = new JPanel();
 		myInfo.setBackground(Color.WHITE);
 		add(myInfo, BorderLayout.WEST);
 		
 		// 내 프로필 사진이 들어갈 JLabel: myProfile
-		JLabel myProfile = new JLabel("");
-		//myProfile.setHorizontalAlignment(SwingConstants.CENTER);
-		icon = new ImageIcon(MyPage.class.getResource("/images/profile.png"));
-		img = icon.getImage();
-		updateImg = img.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
-		updateIcon = new ImageIcon(updateImg);
-		myInfo.setLayout(new GridLayout(2, 0, 0, 0));
-		myProfile.setIcon(updateIcon);
-		myInfo.add(myProfile);
-		
+        JLabel myProfile = new JLabel("");
+        //myProfile.setHorizontalAlignment(SwingConstants.CENTER);
+        ImageIcon icon = new ImageIcon(MyPage.class.getResource("/images/profile.png"));
+        Image img = icon.getImage();
+        Image updateImg = img.getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+        ImageIcon updateIcon = new ImageIcon(updateImg);
+        myInfo.setLayout(new GridLayout(2, 0, 0, 0));
+        myProfile.setIcon(updateIcon);
+        myInfo.add(myProfile);
+	
 		// 내 상세 정보가 들어가는 JTable: myDetail
 		String[] columnNames = {"정보", "내용"};
 		Object[][] rowData = {
 				{"학년", MainPage.getLoginUser().getGrade()},
 				{"반", MainPage.getLoginUser().getClassName()},
-				{"공부시간", MainPage.getLoginUser().getStudyTime()}
 		};
 		myDetail = new JTable(rowData, columnNames);
 		myDetail.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -544,12 +528,13 @@ public class MyPage extends JPanel{
 		myDetail.setRowHeight(50);
 		
 		myInfo.add(myDetail);
-				
-		
-		
 		//-------------------------------------------------------------좌측 상세정보
 		
 				
 		
 	}
+	
+	public JTable getMyDetailTable() {
+        return myDetail;
+    }
 }

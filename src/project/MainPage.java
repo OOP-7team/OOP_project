@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -826,11 +827,11 @@ public class MainPage extends JFrame{
         noticeWrapper.add(noticeContentWrapper);
         
         if(loginUser == null) {
-        	JLabel noticeLoginMessage = new JLabel("로그인 후 이용해주세요");
+           JLabel noticeLoginMessage = new JLabel("");
             noticeLoginMessage.setFont(new Font("굴림", Font.PLAIN, 25));
             noticeContentWrapper.add(noticeLoginMessage);
         }else {
-        	
+            
         }
         
         
@@ -910,37 +911,71 @@ public class MainPage extends JFrame{
 	
 	public void addNotice(Notice notice) {
         notices.add(0, notice); // 작성한 공지사항을 가장 위에 배치
-        updateNotices();
+        updateNotices(); // 공지사항 패널 업데이트
+        JTable table = noticeManager.getNoticeTable(); // 공지사항 테이블에 공지사항 추가하기
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.addRow(new Object[]{notice.getTitle(), notice.getAuthor(), notice.getDate()});
     }
 
-    private void updateNotices() {
-          if (noticeContentWrapper == null) {
-               // Just for safety, if noticeContentWrapper is somehow null, initialize it
-               noticeContentWrapper = new JPanel();
-               noticeContentWrapper.setLayout(new BoxLayout(noticeContentWrapper, BoxLayout.Y_AXIS));
-           }
 
-           noticeContentWrapper.removeAll();
-           
-           int displayCount = Math.min(notices.size(), 5);
-           for (int i = 0; i < displayCount; i++) {
-               Notice notice = notices.get(i);
-               JLabel noticeLabel = new JLabel(notice.getTitle());
-               noticeLabel.setFont(new Font("굴림", Font.PLAIN, 20));
-               noticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-               noticeLabel.addMouseListener(new MouseAdapter() {
-                   @Override
-                   public void mouseClicked(MouseEvent e) {
-                       noticeManager.displayNoticeDetail(notice);
-                   }
-               });
-               noticeContentWrapper.add(noticeLabel);
-           }
-           noticeContentWrapper.revalidate();
-           noticeContentWrapper.repaint();
-       }
-	
-		
+	private void updateNotices() {
+        if (noticeContentWrapper == null) {
+             // Just for safety, if noticeContentWrapper is somehow null, initialize it
+             noticeContentWrapper = new JPanel();
+             noticeContentWrapper.setLayout(new BoxLayout(noticeContentWrapper, BoxLayout.Y_AXIS));
+         }
+
+         noticeContentWrapper.removeAll();
+         
+         int displayCount = Math.min(notices.size(), 5);
+         for (int i = 0; i < displayCount; i++) {
+             Notice notice = notices.get(i);
+             JLabel noticeLabel = new JLabel(notice.getTitle());
+             // 라벨의 크기를 최대 크기로 설정하여 공지사항 제목이 레이아웃 나머지 부분을 차지하지 않도록 
+             noticeLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, noticeLabel.getPreferredSize().height));
+             noticeLabel.setFont(new Font("굴림", Font.PLAIN, 30));
+             noticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+             noticeLabel.addMouseListener(new MouseAdapter() {
+                 @Override
+                 public void mouseClicked(MouseEvent e) {
+                     // 클릭된 라벨의 텍스트를 가져와서 해당 공지사항을 찾음
+                     String selectedTitle = noticeLabel.getText();
+                     Notice selectedNotice = getNoticeByTitle(selectedTitle);
+                     if (selectedNotice != null) {
+                         showNoticeDetail(selectedNotice);
+                     }
+                 }
+             });
+             noticeContentWrapper.add(noticeLabel);
+             
+          // 공지사항 사이의 간격 추가
+             if (i < displayCount - 1) {
+                 noticeContentWrapper.add(Box.createVerticalStrut(60));  // 10px 간격 추가
+             }
+         }
+         
+         // 남는 공간을 채우기 위한 빈 패널 추가
+         noticeContentWrapper.add(Box.createVerticalGlue());
+
+         noticeContentWrapper.revalidate();
+         noticeContentWrapper.repaint();
+     }
+
+	 private Notice getNoticeByTitle(String title) {
+	        for (Notice notice : notices) {
+	            if (notice.getTitle().equals(title)) {
+	                return notice;
+	            }
+	        }
+	        return null;
+	    }
+	   
+	    public void showNoticeDetail(Notice notice) {
+	        JPanel classNoticeContainer = new JPanel(); // 적절한 패널을 생성하여 넘겨줘야 함
+	        ClassNoticeManagement noticeManager = new ClassNoticeManagement(classNoticeContainer);
+	        noticeManager.displayNoticeDetail(notice);
+	    }   
+
 	
 	 public void updateLoginButtons() {
 	        if (getLoginUser() == null) {
@@ -960,6 +995,14 @@ public class MainPage extends JFrame{
 	            logoutButton.setVisible(false);
 	            
 	        } else {
+	        	
+	        	
+//              Notice newNotice1 = new Notice("[중요] 현장체험학습 동의서 제출 (~5/20)", "윤용익", "2024/05/10", "공지사항 예시");
+//              Notice newNotice2= new Notice("2024학년도 1차 구입 예정 도서 목록", "윤용익", "2024/05/11", "공지사항 예시");
+//              Notice newNotice3= new Notice("2024학년도 1학년 신입생 안내문 (수정)", "윤용익", "2024/05/12", "공지사항 예시");
+//              Notice newNotice4= new Notice("학교안전공제회 관련 개인정보 제공 내역", "윤용익", "2024/06/7", "공지사항 예시");
+//              addNotice(newNotice1); addNotice(newNotice2); addNotice(newNotice3); addNotice(newNotice4);
+	        	
 	            userButton.setText(getLoginUser().getName() + "님");
 	            userButton.setBackground(Color.WHITE);
 	            userButton.setFont(new Font("굴림", Font.PLAIN, 30));
@@ -970,7 +1013,6 @@ public class MainPage extends JFrame{
 	                @Override
 	                public void actionPerformed(ActionEvent e) {
 	                	if(loginUser != null) {
-	                		System.out.println("여기 실행됨");
 	                		displayMyPage();
 	                		
 	                	}
